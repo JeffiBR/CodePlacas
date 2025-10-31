@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placas de Ofertas | Sistema Avançado</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🎨</div>
+                    <span class="logo-text">PlacasPro</span>
+                </div>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li class="nav-item active" data-section="upload">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-text">Upload</span>
+                </li>
+                <li class="nav-item" data-section="perfis">
+                    <span class="nav-icon">💾</span>
+                    <span class="nav-text">Perfis</span>
+                </li>
+                <li class="nav-item" data-section="editor">
+                    <span class="nav-icon">🎨</span>
+                    <span class="nav-text">Editor</span>
+                </li>
+                <li class="nav-item" data-section="preview">
+                    <span class="nav-icon">👁️</span>
+                    <span class="nav-text">Preview</span>
+                </li>
+                <li class="nav-item" data-section="confirmacao">
+                    <span class="nav-icon">🖨️</span>
+                    <span class="nav-text">Impressão</span>
+                </li>
+                <li class="nav-item" data-section="gerar">
+                    <span class="nav-icon">🚀</span>
+                    <span class="nav-text">Gerar</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Sistema de Placas de Ofertas</h1>
+                    <p>Crie placas profissionais com design avançado</p>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-sections">
+                <!-- Upload Section -->
+                <section id="upload" class="content-section active">
+                    <div class="section-header">
+                        <h2>Upload de Dados</h2>
+                        <p>Comece fazendo upload do seu arquivo de produtos</p>
+                    </div>
+                    
+                    <div class="upload-modern">
+                        <div class="upload-card" id="uploadArea">
+                            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden>
+                            <div class="upload-icon">📁</div>
+                            <h3>Arraste seu arquivo aqui</h3>
+                            <p>ou <button class="btn-link" onclick="document.getElementById('fileInput').click()">clique para selecionar</button></p>
+                            <div class="upload-supported">
+                                <span class="badge">CSV</span>
+                                <span class="badge">Excel</span>
+                            </div>
+                        </div>
+                        
+                        <div id="fileInfo" class="file-info-card" style="display: none;">
+                            <div class="file-header">
+                                <span class="file-icon">✅</span>
+                                <div class="file-details">
+                                    <h4>Arquivo Carregado</h4>
+                                    <span id="fileName"></span>
+                                </div>
+                            </div>
+                            <div class="file-stats">
+                                <div class="stat">
+                                    <span class="stat-value" id="totalProdutos">0</span>
+                                    <span class="stat-label">Produtos</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="previewCount">0</span>
+                                    <span class="stat-label">Em prévia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preview Table -->
+                    <div class="preview-section" id="previewSection" style="display: none;">
+                        <div class="section-header">
+                            <h3>Prévia dos Dados</h3>
+                            <p>Confira os primeiros produtos carregados</p>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table id="previewTable" class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Valor</th>
+                                        <th>Validade</th>
+                                        <th>Código</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Perfis Section -->
+                <section id="perfis" class="content-section">
+                    <div class="section-header">
+                        <h2>Gerenciar Perfis</h2>
+                        <p>Salve e carregue configurações de layout</p>
+                    </div>
+                    
+                    <div class="perfis-grid">
+                        <div class="perfil-card new-perfil" id="novoPerfilBtn">
+                            <div class="perfil-icon">➕</div>
+                            <h3>Novo Perfil</h3>
+                            <p>Criar novo layout</p>
+                        </div>
+                        
+                        <div id="perfisList" class="perfis-list">
+                            <!-- Perfis serão carregados aqui -->
+                        </div>
+                    </div>
+                    
+                    <div id="editorPerfil" class="perfil-editor" style="display: none;">
+                        <div class="editor-header">
+                            <h3>Criar Novo Perfil</h3>
+                            <input type="text" id="nomePerfil" placeholder="Nome do perfil..." class="modern-input">
+                        </div>
+                        <div class="editor-actions">
+                            <button id="salvarPerfilBtn" class="btn-primary">💾 Salvar Perfil</button>
+                            <button id="excluirPerfilBtn" class="btn-danger" style="display: none;">🗑️ Excluir</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Editor Section -->
+                <section id="editor" class="content-section">
+                    <div class="section-header">
+                        <h2>Editor de Layout</h2>
+                        <p>Personalize cada elemento da sua placa</p>
+                    </div>
+                    
+                    <div class="editor-layout">
+                        <!-- Canvas Area -->
+                        <div class="editor-canvas-area">
+                            <div class="canvas-toolbar">
+                                <h3>Área de Design</h3>
+                                <div class="toolbar-actions">
+                                    <button id="btnVisualizar" class="btn-toolbar">👁️ Visualizar</button>
+                                    <button id="btnToggleLimites" class="btn-toolbar">📏 Limites</button>
+                                    <button id="btnResetLayout" class="btn-toolbar">🔄 Resetar</button>
+                                </div>
+                            </div>
+                            
+                            <div class="placa-canvas-container">
+                                <div class="placa-editor" id="placaEditor">
+                                    <div class="elemento-draggable" data-elemento="nome" id="elementoNome">
+                                        <div class="elemento-header">
+                                            <span class="elemento-icon">📝</span>
+                                            Nome do Produto
+                                        </div>
+                                        <div class="elemento-content" id="contentNome">Nome do Produto Exemplo</div>
+                                        <div class="dimensoes-info"></div>
+                                    </div>
+                                    
+                                    <div class="elemento-draggable" data-elemento="valor" id="elementoValor">
+                                        <div class="elemento-header">
+                                            <span class="elemento-icon">💰</span>
+                                            Valor
+                                        </div>
+                                        <div class="elemento-content" id="contentValor">R$ 99,90</div>
+                                        <div class="dimensoes-info"></div>
+                                    </div>
+                                    
+                                    <div class="elemento-draggable" data-elemento="data" id="elementoData">
+                                        <div class="elemento-header">
+                                            <span class="elemento-icon">📅</span>
+                                            Data
+                                        </div>
+                                        <div class="elemento-content" id="contentData">Válido até: 30/10/2025</div>
+                                        <div class="dimensoes-info"></div>
+                                    </div>
+                                    
+                                    <div class="elemento-draggable" data-elemento="codigo" id="elementoCodigo">
+                                        <div class="elemento-header">
+                                            <span class="elemento-icon">📋</span>
+                                            Código
+                                        </div>
+                                        <div class="elemento-content" id="contentCodigo">Cód: 1234567890123</div>
+                                        <div class="dimensoes-info"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Control Panel -->
+                        <div class="control-panel-modern">
+                            <div class="panel-tabs">
+                                <button class="panel-tab active" data-tab="geral">⚙️ Geral</button>
+                                <button class="panel-tab" data-tab="elementos">🎨 Elementos</button>
+                            </div>
+                            
+                            <div class="panel-content">
+                                <!-- Tab Geral -->
+                                <div class="tab-pane active" id="tabGeral">
+                                    <div class="form-group-modern">
+                                        <label class="form-label">Tamanho da Placa</label>
+                                        <select id="tamanhoPlaca" class="modern-select">
+                                            <option value="A4">A4 (1 por folha)</option>
+                                            <option value="A3">A3 Grande</option>
+                                            <option value="A5">A5 (2 por folha)</option>
+                                            <option value="A6">A6 (4 por folha)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group-modern">
+                                        <label class="form-label">Fundo da Placa</label>
+                                        <select id="imagemFundo" class="modern-select">
+                                            <option value="padrao">Fundo Simples</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group-modern">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="mostrarBordas" checked>
+                                            <span class="checkmark"></span>
+                                            Mostrar bordas na placa
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Elementos -->
+                                <div class="tab-pane" id="tabElementos">
+                                    <div class="elementos-accordion">
+                                        <!-- Nome do Produto -->
+                                        <div class="accordion-item active">
+                                            <div class="accordion-header">
+                                                <span class="accordion-icon">📝</span>
+                                                Nome do Produto
+                                                <span class="accordion-arrow">▼</span>
+                                            </div>
+                                            <div class="accordion-content">
+                                                <div class="element-controls">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" id="nomeVisivel" checked>
+                                                        <span class="checkmark"></span>
+                                                        Elemento visível
+                                                    </label>
+                                                    
+                                                    <div class="control-grid">
+                                                        <div class="control-group">
+                                                            <label>Largura máxima</label>
+                                                            <input type="number" id="nomeLargura" value="300" class="modern-input small">
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <label>Altura máxima</label>
+                                                            <input type="number" id="nomeAltura" value="100" class="modern-input small">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Fonte</label>
+                                                        <select id="fonteNome" class="modern-select">
+                                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Tamanho: <span id="tamanhoNomeValue">20</span>px</label>
+                                                        <input type="range" id="tamanhoNome" min="8" max="40" value="20" class="modern-slider">
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Cor do texto</label>
+                                                        <div class="color-picker-group">
+                                                            <input type="color" id="corNome" value="#2D3748">
+                                                            <span class="color-value">#2D3748</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Valor -->
+                                        <div class="accordion-item active">
+                                            <div class="accordion-header">
+                                                <span class="accordion-icon">💰</span>
+                                                Valor do Produto
+                                                <span class="accordion-arrow">▼</span>
+                                            </div>
+                                            <div class="accordion-content">
+                                                <div class="element-controls">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" id="valorVisivel" checked>
+                                                        <span class="checkmark"></span>
+                                                        Elemento visível
+                                                    </label>
+                                                    
+                                                    <div class="control-grid">
+                                                        <div class="control-group">
+                                                            <label>Largura máxima</label>
+                                                            <input type="number" id="valorLargura" value="200" class="modern-input small">
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <label>Altura máxima</label>
+                                                            <input type="number" id="valorAltura" value="50" class="modern-input small">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Fonte</label>
+                                                        <select id="fonteValor" class="modern-select">
+                                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Tamanho: <span id="tamanhoValorValue">28</span>px</label>
+                                                        <input type="range" id="tamanhoValor" min="15" max="50" value="28" class="modern-slider">
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Cor do valor</label>
+                                                        <div class="color-picker-group">
+                                                            <input type="color" id="corValor" value="#E53E3E">
+                                                            <span class="color-value">#E53E3E</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Data -->
+                                        <div class="accordion-item active">
+                                            <div class="accordion-header">
+                                                <span class="accordion-icon">📅</span>
+                                                Data de Validade
+                                                <span class="accordion-arrow">▼</span>
+                                            </div>
+                                            <div class="accordion-content">
+                                                <div class="element-controls">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" id="dataVisivel" checked>
+                                                        <span class="checkmark"></span>
+                                                        Elemento visível
+                                                    </label>
+                                                    
+                                                    <div class="control-grid">
+                                                        <div class="control-group">
+                                                            <label>Largura máxima</label>
+                                                            <input type="number" id="dataLargura" value="250" class="modern-input small">
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <label>Altura máxima</label>
+                                                            <input type="number" id="dataAltura" value="30" class="modern-input small">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Fonte</label>
+                                                        <select id="fonteData" class="modern-select">
+                                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Tamanho: <span id="tamanhoDataValue">14</span>px</label>
+                                                        <input type="range" id="tamanhoData" min="8" max="25" value="14" class="modern-slider">
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Cor do texto</label>
+                                                        <div class="color-picker-group">
+                                                            <input type="color" id="corData" value="#4A5568">
+                                                            <span class="color-value">#4A5568</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Código -->
+                                        <div class="accordion-item active">
+                                            <div class="accordion-header">
+                                                <span class="accordion-icon">📋</span>
+                                                Código de Barras
+                                                <span class="accordion-arrow">▼</span>
+                                            </div>
+                                            <div class="accordion-content">
+                                                <div class="element-controls">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" id="codigoVisivel" checked>
+                                                        <span class="checkmark"></span>
+                                                        Elemento visível
+                                                    </label>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Gerar código EAN13</label>
+                                                        <button id="gerarCodigoBarrasBtn" class="btn-small">🔄 Gerar</button>
+                                                    </div>
+                                                    
+                                                    <div class="control-grid">
+                                                        <div class="control-group">
+                                                            <label>Largura texto</label>
+                                                            <input type="number" id="codigoLargura" value="200" class="modern-input small">
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <label>Largura imagem</label>
+                                                            <input type="number" id="codigoLarguraImagem" value="120" class="modern-input small">
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <label>Altura imagem</label>
+                                                            <input type="number" id="codigoAlturaImagem" value="30" class="modern-input small">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Fonte</label>
+                                                        <select id="fonteCodigo" class="modern-select">
+                                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Tamanho: <span id="tamanhoCodigoValue">12</span>px</label>
+                                                        <input type="range" id="tamanhoCodigo" min="8" max="20" value="12" class="modern-slider">
+                                                    </div>
+                                                    
+                                                    <div class="control-group">
+                                                        <label>Cor do texto</label>
+                                                        <div class="color-picker-group">
+                                                            <input type="color" id="corCodigo" value="#718096">
+                                                            <span class="color-value">#718096</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" id="usarImagemCodigo">
+                                                        <span class="checkmark"></span>
+                                                        Usar imagem do código de barras
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Preview Section -->
+                <section id="preview" class="content-section">
+                    <div class="section-header">
+                        <h2>Pré-visualização</h2>
+                        <p>Visualize cada placa antes de gerar</p>
+                    </div>
+                    
+                    <div class="preview-container-modern">
+                        <div class="preview-controls-modern">
+                            <div class="preview-nav">
+                                <button id="btnPreviewAnterior" class="btn-nav">⬅️</button>
+                                <div class="preview-info">
+                                    <span id="previewIndice">Produto 1 de 10</span>
+                                    <span class="preview-count" id="previewTotal">10 produtos</span>
+                                </div>
+                                <button id="btnPreviewProximo" class="btn-nav">➡️</button>
+                            </div>
+                            
+                            <select id="selectPreviewProduto" class="modern-select">
+                                <option value="0">Produto 1</option>
+                            </select>
+                        </div>
+                        
+                        <div class="preview-content">
+                            <div id="previewIndividual" class="placa-preview-modern">
+                                <div class="preview-placeholder">
+                                    <div class="placeholder-icon">👁️</div>
+                                    <h3>Pré-visualização</h3>
+                                    <p>Clique em "Visualizar" para gerar a prévia desta placa</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção de Confirmação de Impressão -->
+                <section id="confirmacao" class="content-section">
+                    <div class="section-header">
+                        <h2>Confirmação de Impressão</h2>
+                        <p>Revise cada placa antes de imprimir</p>
+                    </div>
+                    
+                    <div class="confirmacao-container">
+                        <div class="progresso-confirmacao">
+                            <div class="progresso-info">
+                                <h3>Progresso da Impressão</h3>
+                                <div class="progresso-stats">
+                                    <span id="progressoAtual">0</span> de <span id="progressoTotal">0</span> produtos
+                                    <div class="progresso-bar">
+                                        <div class="progresso-fill" id="progressoFill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="placa-confirmacao">
+                            <div class="confirmacao-header">
+                                <h4>Pré-visualização da Placa</h4>
+                                <div class="produto-info">
+                                    <strong id="produtoNomeConfirmacao">Nome do Produto</strong>
+                                    <span id="produtoPrecoConfirmacao">R$ 0,00</span>
+                                </div>
+                            </div>
+                            
+                            <div id="previewConfirmacao" class="placa-preview-confirmacao">
+                                <div class="preview-placeholder">
+                                    <div class="placeholder-icon">👁️</div>
+                                    <h3>Pré-visualização</h3>
+                                    <p>Carregando placa...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="problemas-alerta" id="problemasAlerta" style="display: none;">
+                                <div class="alerta-header">
+                                    <span class="alerta-icon">⚠️</span>
+                                    <h4>Problemas Encontrados</h4>
+                                </div>
+                                <div class="alerta-content" id="problemasLista"></div>
+                            </div>
+                            
+                            <div class="acoes-confirmacao">
+                                <button id="btnPularPlaca" class="btn-danger">⏭️ Pular Esta Placa</button>
+                                <button id="btnImprimirPlaca" class="btn-success">🖨️ Confirmar Impressão</button>
+                                <button id="btnImprimirTodas" class="btn-primary">🖨️ Imprimir Todas Válidas</button>
+                                <button id="btnCancelarConfirmacao" class="btn-secondary">❌ Cancelar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="relatorio-section" id="relatorioSection" style="display: none;">
+                            <div class="relatorio-header">
+                                <h3>📊 Relatório de Geração</h3>
+                            </div>
+                            <div class="relatorio-content" id="relatorioContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gerar Section -->
+                <section id="gerar" class="content-section">
+                    <div class="section-header">
+                        <h2>Gerar Placas</h2>
+                        <p>Finalize e exporte suas placas</p>
+                    </div>
+                    
+                    <div class="generate-actions">
+                        <div class="action-card primary">
+                            <div class="action-icon">🎨</div>
+                            <div class="action-content">
+                                <h3>Gerar Todas as Placas</h3>
+                                <p>Crie um PDF com todas as placas configuradas</p>
+                            </div>
+                            <button id="gerarTodasPlacasBtn" class="btn-action">Iniciar Impressão</button>
+                        </div>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-modern" style="display: none;"></div>
+                    
+                    <div id="downloadSection" class="download-section" style="display: none;">
+                        <div class="download-card">
+                            <div class="download-icon">✅</div>
+                            <div class="download-content">
+                                <h3>PDF Gerado com Sucesso!</h3>
+                                <p>Seu arquivo está pronto para download</p>
+                            </div>
+                            <a id="downloadLink" class="btn-download" href="#" target="_blank">
+                                📥 Download PDF
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.17/interact.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
